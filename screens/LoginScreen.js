@@ -28,12 +28,26 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  inputContainer: {},
-  input: {},
-  buttonContainer: {},
-  button: {},
-  buttonText: {},
-  outlineButton: {},
-  outlineButtonText: {},
+  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  inputContainer: { width: "80%" },
+  input: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginTop: 5,
+    borderRadius: 10,
+  },
+  buttonContainer: {
+    width: "50%",
+    marginTop: 40,
+  },
+  button: {
+    backgroundColor: "#00aeff",
+    padding: 15,
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  buttonText: { color: "white", fontSize: 16, fontWeight: "bold" },
+  outlineButton: { backgroundColor: "white", marginTop: 5 },
+  outlineButtonText: { color: "#00aeff", fontSize: 16, fontWeight: "bold" },
 });
