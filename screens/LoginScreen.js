@@ -6,20 +6,46 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.navigate("Home");
+      }
+    });
+  }, []);
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Giriş yapıldı:", user.email);
+      })
+      .catch((error) => {
+        console.error("Hata kodu:", error.code);
+        alert(error.message);
+      });
+  };
 
   const handleSignUp = () => {
     // auth nesnesini ilk parametre olarak gönderiyoruz
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log("Giriş yapıldı:", user.email);
+        console.log("Kayıt yapıldı:", user.email);
       })
       .catch((error) => {
         console.error("Hata kodu:", error.code);
@@ -45,7 +71,7 @@ export default function LoginScreen() {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </TouchableOpacity>
         <TouchableOpacity
