@@ -7,10 +7,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleSignUp = () => {
+    // auth nesnesini ilk parametre olarak gönderiyoruz
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("Giriş yapıldı:", user.email);
+      })
+      .catch((error) => {
+        console.error("Hata kodu:", error.code);
+        alert(error.message);
+      });
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -33,7 +48,10 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.outlineButton]}>
+        <TouchableOpacity
+          onPress={handleSignUp}
+          style={[styles.button, styles.outlineButton]}
+        >
           <Text style={styles.outlineButtonText}>Kayıt ol</Text>
         </TouchableOpacity>
       </View>
